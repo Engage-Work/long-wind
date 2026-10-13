@@ -91,6 +91,14 @@ npm run build    # 静态站点输出到 dist/
 
 推荐桌面版 Chrome / Edge，独立显卡更佳；卡顿时在暂停菜单切到"流畅"。
 
+## 交流群
+
+想一起聊 AI 做游戏的过程、交流经验的，欢迎扫码加入微信群「AI 大航海时代」：
+
+<img src="docs/media/wechat-group.jpg" alt="微信群二维码：AI 大航海时代" width="260">
+
+> 二维码 7 天有效（10 月 20 日前），过期请提 Issue 或在群里联系作者更新。
+
 ---
 
 ## English
