@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>善逸 · 纯代码角色模型</title>
+<link rel="icon" href="data:,">
+<meta name="description" content="Zenitsu built from code alone: parametric geometry + canvas-painted textures, shown as a four-view sheet.">
+<style>
+  html, body { margin: 0; height: 100%; background: #a7a7a7; overflow: hidden; font-family: 'Noto Serif SC', 'Songti SC', serif; }
+  canvas#c { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; touch-action: none; }
+  #labels { position: fixed; left: 0; right: 0; bottom: 14px; display: grid; grid-template-columns: repeat(4, 1fr); pointer-events: none;
+            color: #4a4540; font-size: 13px; letter-spacing: 0.3em; text-align: center; }
+  #labels.hidden { display: none; }
+  #hint { position: fixed; top: 12px; right: 16px; color: #5a554f; font-size: 12px; letter-spacing: 0.12em; opacity: 0.75; pointer-events: none; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="labels"><span>正面</span><span>侧面</span><span>背面</span><span>转台</span></div>
+<div id="hint">?mode=orbit 自由旋转 · ?pose=relaxed|guard|crouch|wave · ?outline=0</div>
+<script type="module" src="./src/zenitsu.js"></script>
+</body>
+</html>

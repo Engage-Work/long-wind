@@ -91,6 +91,15 @@ npm run build    # 静态站点输出到 dist/
 
 推荐桌面版 Chrome / Edge，独立显卡更佳；卡顿时在暂停菜单切到"流畅"。
 
+### 纯代码角色实验 · 善逸
+
+`zenitsu.html` 是一个独立页面：按四视图设定稿，不用任何模型或贴图文件，全部由代码生成一个赛璐珞风格的角色（参数化扫掠 / 旋转体几何 + Canvas 绘制的鳞纹渐变、脸、刀柄花纹），以"正面 · 侧面 · 背面 · 转台"四格展示。模型在 `src/character/zenitsu.js`，带可摆姿势的关节树。
+
+```
+http://127.0.0.1:5173/zenitsu.html              # 四视图
+http://127.0.0.1:5173/zenitsu.html?mode=orbit   # 自由旋转；?pose=guard|crouch|wave  ?outline=0
+```
+
 ## 交流群
 
 想一起聊 AI 做游戏的过程、交流经验的，欢迎扫码加入微信群「AI 大航海时代」：
