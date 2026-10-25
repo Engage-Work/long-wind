@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>长风 · Long Wind</title>
+<title>Long Wind</title>
 <link rel="icon" href="data:,">
 <meta name="description" content="A lone swordsman on a golden-hour grassland. Real-time three.js.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,8 @@
   #load .wrap { display: grid; justify-items: center; gap: 22px; transform: translateY(-2vh); }
   #load .title { font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif; font-size: min(92px, 18vw); color: var(--ink); letter-spacing: 0.08em; line-height: 1;
                  text-shadow: 0 0 24px rgba(232, 211, 173, 0.18); opacity: 0.92; }
-  #load .sub { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; letter-spacing: 0.32em; color: rgba(232,211,173,0.55); text-transform: uppercase; }
+  #load .sub { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; letter-spacing: 0.32em; color: rgba(232,211,173,0.55); text-transform: uppercase;
+               text-align: center; max-width: 86vw; line-height: 1.7; text-wrap: balance; }
   #load svg { width: min(360px, 70vw); height: 24px; overflow: visible; }
   #load .stroke { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0.985;
                   transition: stroke-dashoffset 0.5s cubic-bezier(.3,.7,.2,1); filter: url(#brush); opacity: 0.85; }
@@ -37,7 +38,7 @@
 <div id="hud"></div>
 <div id="load" aria-hidden="true"><div class="wrap">
   <div class="title">长风</div>
-  <div class="sub">天苍苍 · 野茫茫</div>
+  <div class="sub">Vast the sky · boundless the plain</div>
   <svg viewBox="0 0 360 24">
     <defs><filter id="brush" x="-5%" y="-80%" width="110%" height="260%"><feTurbulence type="fractalNoise" baseFrequency="0.9 0.25" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter></defs>
     <path class="track" d="M6 12 C 90 9, 250 15, 354 11"/>
