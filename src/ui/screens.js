@@ -1,56 +1,59 @@
 // HUD markup and words: title, wave names, controls, pause, and the poems for victory and defeat.
-// Poems are classical and public domain: 敕勒歌 (tagline), 李白《侠客行》 (victory), 《易水歌》 (defeat).
+// Poems are classical and public domain: 李白《侠客行》 (victory) and 《易水歌》 (defeat). They stay as brush-written
+// columns (decoration, like the 长风 logo) with the English translation set beneath.
 // Owner: UI (U).
 
-export const NUMERALS = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
-export const numeral = (n) => (n <= 10 ? NUMERALS[n] : n < 20 ? '十' + NUMERALS[n - 10] : String(n));
+const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+export const numeral = (n) => ROMAN[n] || String(n);
 
-// Default names per wave (used when the director's title is missing or not Chinese).
+// Default names per wave (used when the director's title is missing).
 export const WAVES = [
-  { tt: '风起', en: 'The wind rises' },
-  { tt: '草动', en: 'The grass stirs' },
-  { tt: '剑鸣', en: 'The sword sings' },
-  { tt: '云散', en: 'The clouds part' },
-  { tt: '雁回', en: 'The geese return' },
+  { tt: 'The Wind Rises' },
+  { tt: 'The Grass Stirs' },
+  { tt: 'The Sword Sings' },
+  { tt: 'The Clouds Part' },
+  { tt: 'The Geese Return' },
 ];
-export const BOSS_WAVE = { no: '终回', tt: '长风', en: 'The long wind' };
-export const WAVE_EN = { 风起: 'The wind rises', 草动: 'The grass stirs', 剑鸣: 'The sword sings', 云散: 'The clouds part', 长风: 'The long wind', 雁回: 'The geese return', 风定: 'The field falls still' };
+export const BOSS_WAVE = { tt: 'The Long Wind' };
 
 // Default boss names by enemy kind (director may send its own via enemy:spawn {name, sub}).
 export const BOSS_NAMES = {
-  swordmaster: { name: '寒山客', sub: 'Swordmaster of Cold Mountain' },
-  boss: { name: '寒山客', sub: 'Swordmaster of Cold Mountain' },
-  bandit_heavy: { name: '断岳', sub: 'The Mountain-Breaker' },
-  assassin: { name: '夜枭', sub: 'The Night Owl' },
+  swordmaster: { name: 'The Broken Blade', sub: 'Swordmaster' },
+  boss: { name: 'The Broken Blade', sub: 'Swordmaster' },
+  bandit_heavy: { name: 'Mountain-Breaker', sub: 'Bandit Chief' },
+  assassin: { name: 'The Night Owl', sub: 'Assassin of the Rain' },
 };
 
 export const CONTROLS = [
-  ['W A S D', '行', 'move'],
-  ['Mouse', '顾', 'look'],
-  ['LMB', '斩', 'strike'],
-  ['Hold LMB', '劈', 'heavy'],
-  ['RMB', '格', 'block · parry on impact'],
-  ['Space', '闪', 'dodge'],
-  ['Shift', '疾', 'sprint'],
-  ['Q · Tab', '锁', 'lock on'],
-  ['E', '气', 'sword qi'],
-  ['F', '剑', 'draw · sheathe'],
-  ['Esc', '歇', 'pause'],
+  ['W A S D', 'Move'],
+  ['Mouse', 'Look'],
+  ['LMB', 'Strike'],
+  ['Hold LMB', 'Heavy strike'],
+  ['RMB', 'Block · parry on impact'],
+  ['Space', 'Dodge'],
+  ['Shift', 'Sprint'],
+  ['Q · Tab', 'Lock on'],
+  ['E', 'Sword qi'],
+  ['F', 'Draw · sheathe'],
+  ['Esc', 'Pause'],
 ];
 // The in-game hint shows only the essentials.
 export const HINT = [0, 2, 4, 5, 7, 8];
 
+/** `<kbd>key</kbd><span>action</span>` pairs, shared by the keyboard list here and the touch lists in touch.js. */
+export const controlRows = (list) => list.map(([k, action]) => `<kbd>${k}</kbd><span>${action}</span>`).join('');
+
 export const VICTORY = {
   lines: ['十步杀一人', '千里不留行', '事了拂衣去', '深藏身与名'],
-  en: 'Ten paces, and a man falls; a thousand li, and no trace remains.<br>The deed done, he shakes out his robe and goes, keeping his name and self unknown.',
-  src: 'Li Bai · The Wandering Swordsman',
-  go: ['再战', 'ride on'],
+  en: 'Ten paces, and a man falls; a thousand miles, and no trace is left.<br>The deed done, he shakes out his sleeves and goes, his name and self buried deep.',
+  src: 'Li Bai · Ballad of the Wandering Knight',
+  go: 'Ride on',
 };
 export const DEFEAT = {
   lines: ['风萧萧兮易水寒', '壮士一去兮不复还'],
-  en: 'The wind sighs, and the waters of the Yi run cold;<br>the warrior sets out, and does not return.',
+  en: 'The wind sighs, and the waters of the Yi run cold;<br>the warrior departs, and does not return.',
   src: 'Song of the Yi River',
-  go: ['再起', 'rise again'],
+  go: 'Rise again',
 };
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -77,7 +80,7 @@ ${FILTERS}
 <div class="edge"></div>
 <div class="qi"></div>
 <div class="play vitals">
-  <div class="focus"><div class="wash"></div><div class="rt m"></div><div class="r m"></div><div class="pulse m"></div><div class="g">气</div></div>
+  <div class="focus"><div class="wash"></div><div class="rt m"></div><div class="r m"></div><div class="pulse m"></div><div class="g">Qi</div></div>
   <div class="health"><div class="tr m"></div><div class="gh m"></div><div class="fl m"></div></div>
 </div>
 <div class="play boss"><div class="nm"></div><div class="sb"></div>
@@ -86,26 +89,26 @@ ${FILTERS}
 </div>
 <div class="ret"><div class="e m"></div><div class="d"></div></div>
 <div class="banner"><div class="wash"></div><div class="no"></div><div class="tt"></div><div class="ru m"></div><div class="en"></div><img class="seal" alt=""></div>
-<div class="hint">${HINT.map((i) => `<kbd>${CONTROLS[i][0]}</kbd><span>${CONTROLS[i][1]}<i>${CONTROLS[i][2]}</i></span>`).join('')}</div>
+<div class="hint">${controlRows(HINT.map((i) => CONTROLS[i]))}</div>
 
 <div class="scr title">
   <div class="shade"></div>
-  <div class="col"><div class="tt">长风</div><div class="tg">天苍苍 · 野茫茫</div><img class="seal" alt=""></div>
+  <div class="col"><div class="tt">长风</div><img class="seal" alt=""></div>
   <div class="en"><b>LONG WIND</b><i>the wind arrives before the blade</i></div>
-  <div class="go"><div class="ln m"></div><div class="t"><b>点击 · 启程</b><i>click to begin</i></div><div class="ln r m"></div></div>
+  <div class="go"><div class="ln m"></div><div class="t"><b>Click to begin</b></div><div class="ln r m"></div></div>
 </div>
 
 <div class="scr pause">
   <div class="shade"></div>
   <div class="pn">
-    <div class="hd">歇<small>PAUSED</small></div>
+    <div class="hd">Paused</div>
     <div class="mn">
-      <button data-act="resume"><b>继续</b><i>resume</i></button>
-      <button data-act="restart"><b>重来</b><i>restart</i></button>
-      <button data-act="controls"><b>招式</b><i>controls</i></button>
-      <div class="vol"><b>声</b><div class="sl"><div class="tr m"></div><div class="fl m"></div></div><i>volume</i></div>
-      <div class="qual"><b>画</b><span class="qo" data-q="low">流畅</span><span class="qo" data-q="med">均衡</span><span class="qo" data-q="high">极致</span><i>quality</i></div>
-      <div class="ctl">${CONTROLS.map(([k, zh, en]) => `<kbd>${k}</kbd><span>${zh}<i>${en}</i></span>`).join('')}</div>
+      <button data-act="resume"><b>Resume</b></button>
+      <button data-act="restart"><b>Restart</b></button>
+      <button data-act="controls"><b>Controls</b></button>
+      <div class="vol"><b>Volume</b><div class="sl"><div class="tr m"></div><div class="fl m"></div></div></div>
+      <div class="qual"><b>Quality</b><span class="qo" data-q="low">Smooth</span><span class="qo" data-q="med">Balanced</span><span class="qo" data-q="high">Ultra</span></div>
+      <div class="ctl">${controlRows(CONTROLS)}</div>
     </div>
   </div>
   <div class="ft">the grass waits · the wind does not</div>
@@ -125,13 +128,13 @@ ${FILTERS}
   <div class="go" data-act="restart"></div>
 </div>`;
 
-/** Fill an ending screen with its poem. Lines are vertical columns read right-to-left. */
+/** Fill an ending screen with its poem: brush-written vertical columns (right-to-left) with the English beneath. */
 export function fillEnding(root, poem, sealUrl) {
   const body = root.querySelector('.body');
   body.innerHTML = poem.lines.map((l, i) => `<div class="ln${i >= 2 ? ' sm' : ''}" style="--i:${i}">${esc(l)}</div>`).join('') +
     (sealUrl ? `<img class="seal" src="${sealUrl}" alt="">` : '');
   root.querySelector('.tr').innerHTML = `${poem.en}<small>${esc(poem.src)}</small>`;
-  root.querySelector('.go').innerHTML = `<b>${esc(poem.go[0])}</b><i>${esc(poem.go[1])}</i>`;
+  root.querySelector('.go').innerHTML = `<b>${esc(poem.go)}</b>`;
 }
 
 export { esc };

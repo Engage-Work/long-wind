@@ -5,36 +5,37 @@
 //   createTouchControls(app, { game, hud }) → { el, layout(), dispose() } | null (not a touch device)
 //   Shown on coarse-pointer devices; ?touch=1 forces it (a mouse can drive it), ?touch=0 turns it off.
 //   · stick: lands wherever the left thumb goes down (left 40 %), rests faintly bottom-left; analog move, pushed past
-//     the rim = sprint (疾)
+//     the rim = sprint
 //   · look: drag anywhere on the right side that is not a button
-//   · 斩 light (hold = heavy charge; the glyph turns 劈) · 闪 dodge · 格 block (tap at impact = parry) · 气 sword-qi
-//     (the ring fills with focus, gold when ready) · 锁 lock-on · 剑 draw/sheathe · ‖ pause
-//   · portrait: a brush note to turn the phone (横屏游玩更佳); play still works
+//   · Strike (hold = heavy charge; the label turns Heavy) · Dodge · Block (tap at impact = parry) · Qi (sword-qi: the
+//     ring fills with focus, gold when ready) · Lock (lock-on) · Draw (draw/sheathe) · ‖ pause
+//   · portrait: a brush note to turn the phone (best played sideways); play still works
 //   · the screens stay tap-driven by the HUD (title, pause menu, endings); here only their words change
 // Only transform/opacity animate; geometry is written on resize, never read per frame.
 import { bus } from '../core/bus.js';
+import { controlRows } from './screens.js';
 
-// a: action, g: glyph, k: size class, ang: position round 斩 (screen degrees: 180 = left, 270 = up), ring: 1 | 2,
+// a: action, g: label, k: size class, ang: position round Strike (screen degrees: 180 = left, 270 = up), ring: 1 | 2,
 // rot: turn of the brush ensō so no two rings look stamped
 const BUTTONS = [
-  { a: 'light', g: '斩', k: 'main', rot: -18 },
-  { a: 'dodge', g: '闪', k: 'mid', ang: 182, ring: 1, rot: 40 },
-  { a: 'block', g: '格', k: 'mid', ang: 226, ring: 1, rot: 160 },
-  { a: 'special', g: '气', k: 'mid', ang: 270, ring: 1, rot: 0 },
-  { a: 'lock', g: '锁', k: 'small', ang: 204, ring: 2, rot: 250 },
-  { a: 'draw', g: '剑', k: 'small', ang: 248, ring: 2, rot: 100 },
+  { a: 'light', g: 'Strike', k: 'main', rot: -18 },
+  { a: 'dodge', g: 'Dodge', k: 'mid', ang: 182, ring: 1, rot: 40 },
+  { a: 'block', g: 'Block', k: 'mid', ang: 226, ring: 1, rot: 160 },
+  { a: 'special', g: 'Qi', k: 'mid', ang: 270, ring: 1, rot: 0 },
+  { a: 'lock', g: 'Lock', k: 'small', ang: 204, ring: 2, rot: 250 },
+  { a: 'draw', g: 'Draw', k: 'small', ang: 248, ring: 2, rot: 100 },
 ];
-const SIZE = { main: 88, mid: 60, small: 46 };     // px at u = 1
+const SIZE = { main: 88, mid: 62, small: 52 };     // px at u = 1
 const RING = [0, 102, 168];
 const STICK_R = 54;                                // ring radius (px at u = 1); the knob travels to the rim
 const DEAD = 0.14, SPRINT_ON = 1.12, SPRINT_OFF = 0.96, FOLLOW = 1.45;
 
-// the in-game hint and the pause menu's 招式 list, for thumbs
-const HINT = [['LEFT DRAG', '行', 'move · past the rim 疾 sprint'], ['RIGHT DRAG', '顾', 'look'], ['HOLD 斩', '劈', 'heavy'], ['TAP 格 AT IMPACT', '破', 'parry']];
+// the in-game hint and the pause menu's controls list, for thumbs
+const HINT = [['LEFT DRAG', 'Move · past the rim, sprint'], ['RIGHT DRAG', 'Look'], ['HOLD STRIKE', 'Heavy strike'], ['BLOCK AT IMPACT', 'Parry']];
 const CONTROLS = [
-  ['LEFT DRAG', '行', 'move'], ['PAST THE RIM', '疾', 'sprint'], ['RIGHT DRAG', '顾', 'look'], ['TAP 斩', '斩', 'strike'],
-  ['HOLD 斩', '劈', 'heavy'], ['HOLD 格', '格', 'block · parry at impact'], ['闪', '闪', 'dodge'], ['锁', '锁', 'lock on'],
-  ['气', '气', 'sword qi'], ['剑', '剑', 'draw · sheathe'], ['‖', '歇', 'pause'],
+  ['LEFT DRAG', 'Move'], ['PAST THE RIM', 'Sprint'], ['RIGHT DRAG', 'Look'], ['TAP STRIKE', 'Light cut'],
+  ['HOLD STRIKE', 'Heavy strike'], ['HOLD BLOCK', 'Block · parry at impact'], ['DODGE', 'Slip the blade'], ['LOCK', 'Lock on'],
+  ['QI', 'Sword qi'], ['DRAW', 'Draw · sheathe'], ['‖', 'Pause'],
 ];
 
 const clamp = (x, a, b) => (x < a ? a : x > b ? b : x);
@@ -62,14 +63,14 @@ export function createTouchControls(app, { game, hud } = {}) {
   layer.className = 'wxt';
   layer.innerHTML = `
     <div class="zone zl"></div><div class="zone zr"></div>
-    <div class="stick"><div class="wash"></div><div class="ring"></div><div class="g">行</div><div class="fast">疾</div><div class="knob"><i></i></div></div>
+    <div class="stick"><div class="wash"></div><div class="ring"></div><div class="g">Move</div><div class="fast">Sprint</div><div class="knob"><i></i></div></div>
     ${BUTTONS.map((B) => `<div class="tb ${B.k}" data-a="${B.a}" style="--rot:${B.rot}deg"><i class="bg"></i>${B.a === 'special' ? '<i class="rt m"></i>' : ''}<i class="gl"></i><i class="r m"></i><i class="bl m"></i><b>${B.g}</b></div>`).join('')}
     <div class="tp"><i class="bg"></i><i class="r m"></i><i class="s m"></i><i class="s m"></i></div>
     <div class="probe"></div>`;
   root.insertBefore(layer, root.querySelector('.scr'));   // under the screens (title, pause, endings)
   const rot = document.createElement('div');
   rot.className = 'wxrot';
-  rot.innerHTML = '<i class="ph"></i><b>横屏游玩更佳</b><em>best played sideways</em>';
+  rot.innerHTML = '<i class="ph"></i><b>Turn your phone</b><em>best played sideways</em>';
   root.appendChild(rot);
   root.classList.add('touch');
   document.documentElement.classList.add('wx-touch');
@@ -81,11 +82,10 @@ export function createTouchControls(app, { game, hud } = {}) {
   const glyphMain = btn.light.el.querySelector('b');
 
   // screens: tap words, and the touch list in the pause menu / in-game hint
-  const rows = (list) => list.map(([k, zh, en]) => `<kbd>${k}</kbd><span>${zh}<i>${en}</i></span>`).join('');
   const setHTML = (sel, html) => { const n = root.querySelector(sel); if (n) n.innerHTML = html; };
-  setHTML('.title .go .t i', 'tap to begin');
-  setHTML('.pause .ctl', rows(CONTROLS));
-  setHTML('.hint', rows(HINT));
+  setHTML('.title .go .t', '<b>Tap to begin</b>');
+  setHTML('.pause .ctl', controlRows(CONTROLS));
+  setHTML('.hint', controlRows(HINT));
 
   // ---------------------------------------------------------------- layout (on resize only)
   const S = {
@@ -102,7 +102,7 @@ export function createTouchControls(app, { game, hud } = {}) {
     if (portrait !== S.portrait) { S.portrait = portrait; S.rotT = 0; root.classList.toggle('portrait', portrait); root.classList.remove('rot-seen'); }
     const u = S.u = clamp(Math.min(W, H) / 400, 0.82, 1.3) * (portrait ? clamp(W / 460, 0.8, 1) : 1);
     const m = 18 * u;
-    // the attack fan: 斩 in the corner, the rest on two arcs round it
+    // the attack fan: Strike in the corner, the rest on two arcs round it
     const cx = W - sa.r - m - SIZE.main * u / 2, cy = H - sa.b - m - SIZE.main * u / 2;
     for (const B of buttons) {
       const d = SIZE[B.k] * u, r = RING[B.ring ?? 0] * u, a = (B.ang ?? 0) * Math.PI / 180;
@@ -213,7 +213,7 @@ export function createTouchControls(app, { game, hud } = {}) {
       if (B.id !== null) return;
       B.id = e.pointerId; pointers.add(e.pointerId); count();
       try { B.el.setPointerCapture(e.pointerId); } catch { /* synthetic event */ }
-      T.hold(B.a, true);                              // held like the key: 斩 held = charge, 格 held = guard
+      T.hold(B.a, true);                              // held like the key: Strike held = charge, Block held = guard
       B.flip = !B.flip;                               // alternate two keyframes: the ink bloom restarts without a reflow
       B.el.classList.remove('p1', 'p2');
       B.el.classList.add('on', B.flip ? 'p1' : 'p2');
@@ -283,7 +283,7 @@ export function createTouchControls(app, { game, hud } = {}) {
     const P = game.player;
     if (!P) return;
     const charge = P.state === 'charge';
-    if (charge !== flags.charge) glyphMain.textContent = charge ? '劈' : '斩';
+    if (charge !== flags.charge) glyphMain.textContent = charge ? 'Heavy' : 'Strike';
     flag('charge', charge, btn.light.el, 'charge');
     flag('guard', P.state === 'block' || P.state === 'parry', btn.block.el, 'act');
     flag('sheathed', !P.drawn, btn.draw.el, 'off');
@@ -339,7 +339,7 @@ html.wx-touch, html.wx-touch body { -webkit-user-select: none; user-select: none
 .wxt .probe { position: absolute; visibility: hidden; pointer-events: none;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 
-/* ---------- stick: a brush ensō under the thumb (行 at rest), a smaller one for the knob ---------- */
+/* ---------- stick: a brush ensō under the thumb (Move at rest), a smaller one for the knob ---------- */
 .wxt .stick { position: absolute; left: 0; top: 0; pointer-events: none; opacity: .42; will-change: transform, opacity;
   transition: transform .38s var(--ease-ink), opacity .45s var(--ease-ink); }
 .wxt .stick.live { opacity: .92; transition: opacity .12s; }
@@ -347,7 +347,7 @@ html.wx-touch, html.wx-touch body { -webkit-user-select: none; user-select: none
 .wxt .stick .wash { inset: 4%; border-radius: 50%; background: radial-gradient(closest-side, rgba(10,8,6,.34), rgba(10,8,6,.2) 70%, rgba(10,8,6,0)); }
 .wxt .stick .ring { inset: 0; background: var(--ink); opacity: .75; transform: rotate(-18deg);
   -webkit-mask: var(--t-enso2) center / 100% 100% no-repeat; mask: var(--t-enso2) center / 100% 100% no-repeat; }
-.wxt .stick .g { inset: 0; display: grid; place-items: center; padding-bottom: 5%; font: calc(var(--d) * .3)/1 var(--f-brush); color: var(--ink);
+.wxt .stick .g { inset: 0; display: grid; place-items: center; padding-bottom: 5%; font: 600 calc(var(--d) * .17)/1 var(--f-latin); letter-spacing: .1em; text-transform: uppercase; color: var(--ink);
   opacity: .8; text-shadow: 0 1px 3px rgba(0,0,0,.5); transition: opacity .2s; }
 .wxt .stick.live .g { opacity: 0; }
 .wxt .stick .knob { left: 27%; top: 27%; width: 46%; height: 46%; will-change: transform; opacity: 0; transition: transform .25s var(--ease-ink), opacity .2s; }
@@ -358,8 +358,8 @@ html.wx-touch, html.wx-touch body { -webkit-user-select: none; user-select: none
 .wxt .stick .knob i { position: absolute; inset: 0; background: var(--ink-hi); opacity: .9; transform: rotate(70deg);
   -webkit-mask: var(--t-enso) center / 100% 100% no-repeat; mask: var(--t-enso) center / 100% 100% no-repeat; }
 .wxt .stick.live .knob { opacity: 1; transition: opacity .12s; }
-/* sprint: the ring turns gold and 疾 takes the centre the knob has left */
-.wxt .stick .fast { inset: 0; display: grid; place-items: center; padding-bottom: 5%; font: calc(var(--d) * .32)/1 var(--f-brush); color: var(--gold);
+/* sprint: the ring turns gold and Sprint takes the centre the knob has left */
+.wxt .stick .fast { inset: 0; display: grid; place-items: center; padding-bottom: 5%; font: 600 calc(var(--d) * .15)/1 var(--f-latin); letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
   text-shadow: 0 0 12px rgba(255,186,90,.8), 0 1px 2px rgba(0,0,0,.6); opacity: 0; transform: scale(1.4); transition: opacity .18s, transform .3s var(--ease-brush); }
 .wxt .stick.fast .ring { background: var(--gold); opacity: 1; }
 .wxt .stick.fast .fast { opacity: 1; transform: none; }
@@ -373,17 +373,17 @@ html.wx-touch, html.wx-touch body { -webkit-user-select: none; user-select: none
   background: radial-gradient(closest-side, rgba(10,8,6,.44), rgba(10,8,6,.3) 62%, rgba(10,8,6,0)); }
 .wxt .tb .r, .wxt .tb .rt { inset: 0; background: var(--ink); opacity: .6; -webkit-mask-image: var(--t-enso); mask-image: var(--t-enso); transform: rotate(var(--rot));
   transition: opacity .15s; }
-.wxt .tb b { inset: 0; display: grid; place-items: center; padding-bottom: 6%; font: 400 calc(var(--d) * .5)/1 var(--f-brush); color: var(--ink-hi);
+.wxt .tb b { inset: 0; display: grid; place-items: center; padding-bottom: 4%; font: 600 calc(var(--d) * .2)/1 var(--f-latin); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-hi);
   text-shadow: 0 1px 3px rgba(0,0,0,.6), 0 0 14px rgba(0,0,0,.28); transition: color .15s, opacity .2s; }
 .wxt .tb .bl { inset: -22%; background: var(--ink-hi); opacity: 0; -webkit-mask-image: var(--t-splat2); mask-image: var(--t-splat2); }
 .wxt .tb .gl { inset: -12%; border-radius: 50%; opacity: 0; background: radial-gradient(closest-side, rgba(255,196,110,.45), rgba(255,186,90,.13) 60%, transparent); }
-.wxt .tb.small b { font-size: calc(var(--d) * .46); }
+.wxt .tb.small b { font-size: calc(var(--d) * .21); }
 .wxt .tb.small .r { opacity: .48; }
-/* 斩: the big one, with a vermilion bloom */
+/* Strike: the big one, with a vermilion bloom */
 .wxt .tb.main .r { opacity: .72; -webkit-mask-image: var(--t-enso2); mask-image: var(--t-enso2); }
-.wxt .tb.main b { font-size: calc(var(--d) * .54); }
+.wxt .tb.main b { font-size: calc(var(--d) * .17); }
 .wxt .tb.main .bl { background: var(--verm-hi); -webkit-mask-image: var(--t-splat); mask-image: var(--t-splat); }
-/* 气: the ring fills with focus like the HUD's ensō */
+/* Qi: the ring fills with focus like the HUD's ensō */
 .wxt .tb[data-a=special] .rt { opacity: .16; }
 .wxt .tb[data-a=special] .r { opacity: .85;
   -webkit-mask-image: var(--t-enso), conic-gradient(from -36deg, #000 calc(var(--f) * 90%), transparent calc(var(--f) * 90% + 1.5%));
@@ -397,16 +397,16 @@ html.wx-touch, html.wx-touch body { -webkit-user-select: none; user-select: none
 .wxt .tb.on b { color: #fff6e2; }
 .wxt .tb.p1 .bl { animation: wxt-bloom .5s var(--ease-ink) forwards; }
 .wxt .tb.p2 .bl { animation: wxt-bloom2 .5s var(--ease-ink) forwards; }
-.wxt .tb.main.charge .r { background: var(--gold); opacity: 1; }                      /* held: the heavy charge (劈) */
+.wxt .tb.main.charge .r { background: var(--gold); opacity: 1; }                      /* held: the heavy charge */
 .wxt .tb.main.charge b { color: var(--gold); text-shadow: 0 0 16px rgba(255,186,90,.8), 0 1px 3px rgba(0,0,0,.5); }
 .wxt .tb.main.charge .gl { animation: wxt-glow .45s ease-in-out infinite alternate; }
-.wxt .tb.act .r { opacity: 1; background: var(--ink-hi); }                            /* 格: the guard is up */
-.wxt .tb[data-a=special].full .r { background: var(--gold); }                         /* 气: ready */
+.wxt .tb.act .r { opacity: 1; background: var(--ink-hi); }                            /* Block: the guard is up */
+.wxt .tb[data-a=special].full .r { background: var(--gold); }                         /* Qi: ready */
 .wxt .tb[data-a=special].full b { opacity: 1; color: var(--gold); text-shadow: 0 0 14px rgba(255,186,90,.75), 0 0 2px rgba(255,220,160,.9); }
 .wxt .tb[data-a=special].full .gl { animation: wx-breathe 2.4s ease-in-out infinite; }
-.wxt .tb.lit .r { background: var(--verm-hi); opacity: .95; }                         /* 锁: the reticle's vermilion */
+.wxt .tb.lit .r { background: var(--verm-hi); opacity: .95; }                         /* Lock: the reticle's vermilion */
 .wxt .tb.lit b { color: #ffd9c8; }
-.wxt .tb.off b { opacity: .55; }                                                      /* 剑: sheathed */
+.wxt .tb.off b { opacity: .55; }                                                      /* Draw: sheathed */
 
 /* pause: two brush strokes in a faint ensō */
 .wxt .tp .r { inset: 0; background: var(--ink); opacity: .4; -webkit-mask-image: var(--t-enso2); mask-image: var(--t-enso2); transform: rotate(130deg); }
@@ -431,16 +431,16 @@ html.wx-touch, html.wx-touch body { -webkit-user-select: none; user-select: none
 .wx.touch .title .go { left: 0; right: 0; justify-content: center; }
 .wx.touch .end .go, .wx.touch .end .tr { left: 0; right: 0; margin-left: auto; margin-right: auto; }
 @media (max-height: 500px) and (orientation: landscape) {
-  /* a short landscape phone: 点击 · 启程 moves under the hero, clear of the LONG WIND lines under the column */
+  /* a short landscape phone: 'Tap to begin' moves under the hero, clear of the LONG WIND lines under the column */
   .wx.touch .title .go { left: calc(env(safe-area-inset-left) + 13%); right: auto; bottom: 7vh; }
   .wx.touch .end .tr { display: none; }            /* no room under the poem columns: the English makes way */
 }
 /* pause menu: rows as wide as their words (a tapped row keeps its underline: touch has sticky hover); on a phone the
-   招式 list takes the place of the sound / quality / chapter rows, in two columns */
+   controls list takes the place of the sound / quality / chapter rows, in two columns */
 .wx.touch .pause button { align-self: flex-start; }
-.wx.touch.portrait .pause .pn { left: calc(env(safe-area-inset-left) + 26px); right: 14px; flex-direction: column; gap: 4px; }   /* upright: 歇 above */
-.wx.touch.portrait .pause .hd { font-size: 64px; }
-.wx.touch.portrait .pause .qual i { display: none; }
+.wx.touch.portrait .pause .pn { left: calc(env(safe-area-inset-left) + 26px); right: 14px; flex-direction: column; gap: 4px; }   /* upright: Paused above */
+.wx.touch.portrait .pause .hd { writing-mode: horizontal-tb; font-size: 40px; }
+
 .wx.touch.portrait .pause .ctl { gap: 7px 12px; }
 .wx.touch.portrait .pause .ctl span, .wx.touch.portrait .pause .ctl span i { font-size: 13px; }
 @media (max-height: 600px) {
@@ -460,7 +460,7 @@ html.wx-touch, html.wx-touch body { -webkit-user-select: none; user-select: none
   -webkit-mask: var(--t-wash) center / 100% 100% no-repeat; mask: var(--t-wash) center / 100% 100% no-repeat; }
 .wx .wxrot .ph { display: block; width: 20px; height: 34px; margin: 0 auto 12px; border: 2px solid var(--ink); border-radius: 4px; opacity: .85;
   box-shadow: inset 0 -3px 0 -1px rgba(232,211,173,.5); animation: wxt-turn 2.8s var(--ease-ink) infinite; }
-.wx .wxrot b { display: block; font: 400 26px/1 var(--f-brush); letter-spacing: .3em; padding-left: .3em; color: var(--ink-hi); text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+.wx .wxrot b { display: block; font: 600 22px/1 var(--f-latin); letter-spacing: .24em; padding-left: .24em; text-transform: uppercase; color: var(--ink-hi); text-shadow: 0 1px 3px rgba(0,0,0,.5); }
 .wx .wxrot em { display: block; margin-top: 8px; font: italic 400 12px/1 var(--f-latin); letter-spacing: .26em; padding-left: .26em; color: var(--ink-dim); text-transform: uppercase; }
 
 @keyframes wxt-bloom { 0% { opacity: .5; transform: scale(.45) rotate(0deg); } 100% { opacity: 0; transform: scale(1.12) rotate(24deg); } }

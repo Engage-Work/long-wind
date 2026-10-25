@@ -1,5 +1,6 @@
 // Builds every HUD brush texture once and publishes them as CSS custom properties (--t-*) on the HUD root, plus
-// seal images. Work is spread over macrotasks so the loader / first frames never stall on a long block.
+// seal images (长风, 剑, 破, 侠客, 易水: vermilion stamps kept in Chinese as decoration, not labels). Work is spread over
+// macrotasks so the loader / first frames never stall on a long block.
 // Owner: UI (U).
 import { strokeTex, ensoTex, splatTex, washTex, sealTex, toURL } from './brush.js';
 import { createNoise } from '../core/noise.js';
@@ -46,7 +47,7 @@ export async function buildTextures(root) {
   const seals = {};
   try {
     await Promise.race([
-      Promise.all([document.fonts.load('900 64px "Noto Serif SC"', '长风剑破侠胜败歇'), document.fonts.load('64px "Ma Shan Zheng"', '长风')]),
+      Promise.all([document.fonts.load('900 64px "Noto Serif SC"', '长风剑破侠客易水'), document.fonts.load('64px "Ma Shan Zheng"', '长风')]),
       new Promise((r) => setTimeout(r, 4000)),
     ]);
   } catch { /* fonts are optional: fall back to system serif */ }
@@ -56,6 +57,5 @@ export async function buildTextures(root) {
   await mk('parry', { text: '破', h: 96, w: 96, seed: 6, white: false });
   await mk('xia', { text: '侠客', h: 150, seed: 8 });
   await mk('fall', { text: '易水', h: 150, seed: 9, white: false });
-  await mk('rest', { text: '歇', h: 96, w: 96, seed: 10 });
   return { seals };
 }

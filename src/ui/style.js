@@ -1,5 +1,5 @@
 // HUD stylesheet (injected once). Ink #e8d3ad on the living scene, vermilion #b8322a for the one warm accent,
-// Ma Shan Zheng for calligraphy, Noto Serif SC for small Chinese text, Cormorant Garamond for Latin.
+// Ma Shan Zheng for the calligraphic logo and poems, Noto Serif SC as the Chinese fallback, Cormorant Garamond for every English label.
 // Brush textures arrive as CSS custom properties (--t-*) set by ui/textures.js; until then they are transparent,
 // so nothing flashes as a hard rectangle. Only transform/opacity animate in play; masks stay static.
 // Owner: UI (U).
@@ -37,7 +37,7 @@ export const HUD_CSS = /* css */`
   -webkit-mask-image: var(--t-enso), conic-gradient(from -36deg, #000 calc(var(--f) * 90%), transparent calc(var(--f) * 90% + 1.5%));
   mask-image: var(--t-enso), conic-gradient(from -36deg, #000 calc(var(--f) * 90%), transparent calc(var(--f) * 90% + 1.5%));
   -webkit-mask-composite: source-in; mask-composite: intersect; }
-.wx .focus .g { display: grid; place-items: center; font-family: var(--f-brush); font-size: calc(34px * var(--s)); line-height: 1;
+.wx .focus .g { display: grid; place-items: center; font: italic 600 calc(30px * var(--s))/1 var(--f-latin);
   color: var(--ink); opacity: calc(.28 + .5 * var(--f)); padding-bottom: 6%; transition: color .4s, text-shadow .4s; }
 .wx .focus.full .r { background: var(--gold); filter: drop-shadow(0 0 6px rgba(255,190,100,.55)); }
 .wx .focus.full .g { color: var(--gold); opacity: 1; text-shadow: 0 0 14px rgba(255,186,90,.75), 0 0 2px rgba(255,220,160,.9); animation: wx-breathe 2.4s ease-in-out infinite; }
@@ -71,7 +71,7 @@ export const HUD_CSS = /* css */`
 .wx[data-state] .boss:not(.on) { opacity: 0; }  /* the boss bar stays hidden during play until a boss is tracked */
 .wx .boss::before { content: ''; position: absolute; left: -6%; right: -6%; top: -45%; bottom: -55%; z-index: -1;
   background: radial-gradient(closest-side, rgba(12,9,6,.34), rgba(12,9,6,.16) 55%, transparent); }
-.wx .boss .nm { font-family: var(--f-brush); font-size: clamp(30px, 3.3vw, 52px); line-height: 1; letter-spacing: .24em; padding-left: .24em;
+.wx .boss .nm { font: 600 clamp(24px, 2.7vw, 42px)/1.05 var(--f-latin); letter-spacing: .1em; padding-left: .1em; text-wrap: balance;
   color: var(--ink-hi); text-shadow: 0 1px 3px rgba(0,0,0,.35), 0 2px 18px rgba(0,0,0,.4); filter: url(#wx-ink); }
 .wx .boss .sb { margin-top: 8px; font: italic 600 clamp(11px, .9vw, 14px)/1 var(--f-latin); letter-spacing: .42em; padding-left: .42em; text-transform: uppercase; color: var(--ink); opacity: .8; text-shadow: 0 1px 4px rgba(0,0,0,.5); }
 .wx .boss .bar, .wx .boss .po { filter: drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
@@ -117,10 +117,10 @@ export const HUD_CSS = /* css */`
 .wx .mk.dead .x { animation: wx-slash .5s var(--ease-brush) forwards; }
 .wx .mk.dead { transition: opacity .9s ease .5s; }
 .wx .mk .wr { position: absolute; left: 50%; bottom: 20px; width: 44px; height: 44px; margin-left: -22px; display: grid; place-items: center;
-  font: 36px/1 var(--f-brush); color: var(--verm-hi); text-shadow: 0 0 10px rgba(255,80,40,.6), 0 1px 2px rgba(0,0,0,.6); opacity: 0; }
+  font: 700 38px/1 var(--f-latin); color: var(--verm-hi); text-shadow: 0 0 10px rgba(255,80,40,.6), 0 1px 2px rgba(0,0,0,.6); opacity: 0; }
 .wx .mk .wr.go { animation: wx-danger .9s var(--ease-ink) forwards; }
-.wx .mk .bk { position: absolute; left: 50%; bottom: 18px; width: 40px; height: 40px; margin-left: -20px; display: grid; place-items: center;
-  font: 34px/1 var(--f-brush); color: var(--ink-hi); text-shadow: 0 0 12px rgba(255,120,60,.85), 0 0 3px rgba(255,200,150,.9), 0 1px 2px rgba(0,0,0,.6); opacity: 0; }
+.wx .mk .bk { position: absolute; left: 50%; bottom: 18px; width: 80px; height: 40px; margin-left: -40px; display: grid; place-items: center;
+  font: italic 700 24px/1 var(--f-latin); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; color: var(--ink-hi); text-shadow: 0 0 12px rgba(255,120,60,.85), 0 0 3px rgba(255,200,150,.9), 0 1px 2px rgba(0,0,0,.6); opacity: 0; }
 .wx .mk .bk.go { animation: wx-danger 1.1s var(--ease-ink) forwards; }
 .wx .mk .gl { position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; margin: -15px; opacity: 0;
   background: radial-gradient(circle, rgba(255,236,190,.95), rgba(255,200,120,.35) 30%, transparent 65%); }
@@ -158,16 +158,16 @@ export const HUD_CSS = /* css */`
 .wx .qi.go { animation: wx-qi 1s var(--ease-brush) forwards; }
 
 /* ---------- wave banner ---------- */
-.wx .banner { position: absolute; left: 50%; top: 31%; transform: translate(-50%, -50%); text-align: center; opacity: 0; white-space: nowrap; }
+.wx .banner { position: absolute; left: 50%; top: 31%; transform: translate(-50%, -50%); text-align: center; opacity: 0; width: max-content; max-width: 92vw; }
 .wx .banner.on { opacity: 1; }
 .wx .banner.off { animation: wx-dissolve 1.4s var(--ease-ink) forwards; }
 .wx .banner .wash { position: absolute; left: -38%; right: -38%; top: -52%; bottom: -58%; background: rgba(7,6,4,.28); -webkit-mask-image: var(--t-wash); mask-image: var(--t-wash);
   -webkit-mask-size: 100% 100%; mask-size: 100% 100%; opacity: 0; transform: scale(.92); }
 .wx .banner.on .wash { animation: wx-wash 1.2s var(--ease-ink) forwards; }
-.wx .banner .no { position: relative; font: 600 clamp(14px, 1.25vw, 20px)/1 var(--f-serif); letter-spacing: .9em; padding-left: .9em; color: var(--ink); opacity: 0; }
+.wx .banner .no { position: relative; font: 600 clamp(13px, 1.1vw, 18px)/1 var(--f-latin); letter-spacing: .6em; padding-left: .6em; text-transform: uppercase; color: var(--ink); opacity: 0; }
 .wx .banner.on .no { animation: wx-rise .9s var(--ease-ink) .1s forwards; }
 .wx .banner.boss .no { color: var(--verm-hi); text-shadow: 0 0 12px rgba(0,0,0,.45); }
-.wx .banner .tt { position: relative; margin-top: .18em; font-family: var(--f-brush); font-size: clamp(72px, 9.5vw, 168px); line-height: 1.02; letter-spacing: .18em; padding-left: .18em;
+.wx .banner .tt { position: relative; margin-top: .18em; font-family: var(--f-latin); font-weight: 600; font-size: clamp(38px, 6vw, 108px); line-height: 1.05; letter-spacing: .03em; padding-left: .03em; text-wrap: balance;
   color: var(--ink-hi); text-shadow: 0 4px 30px rgba(0,0,0,.35); filter: url(#wx-ink);
   -webkit-mask-image: linear-gradient(90deg, #000 42%, transparent 58%); mask-image: linear-gradient(90deg, #000 42%, transparent 58%);
   -webkit-mask-size: 260% 100%; mask-size: 260% 100%; -webkit-mask-position: 100% 0; mask-position: 100% 0; }
@@ -179,6 +179,7 @@ export const HUD_CSS = /* css */`
 .wx .banner.on .ru { animation: wx-wipe2 1.1s var(--ease-brush) .9s forwards; }
 .wx .banner .en { position: relative; margin-top: 14px; font: italic 500 clamp(13px, 1.1vw, 18px)/1 var(--f-latin); letter-spacing: .5em; padding-left: .5em;
   text-transform: uppercase; color: var(--ink); opacity: 0; }
+.wx .banner .en:empty { display: none; }
 .wx .banner.on .en { animation: wx-rise 1s var(--ease-ink) 1.3s forwards; }
 .wx .banner .seal { position: absolute; right: -6%; top: 22%; width: clamp(26px, 2.4vw, 40px); opacity: 0; transform: scale(1.6) rotate(-8deg); }
 .wx .banner.on .seal { animation: wx-stamp .45s cubic-bezier(.5,0,.7,1.4) 1.55s forwards; }
@@ -189,9 +190,8 @@ export const HUD_CSS = /* css */`
 .wx .hint.on { opacity: .9; }
 .wx .hint::before { content: ''; position: absolute; left: -30%; right: -22%; top: -30%; bottom: -30%; background: rgba(6,5,4,.34); z-index: -1;
   -webkit-mask-image: var(--t-wash); mask-image: var(--t-wash); -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
-.wx kbd { font: 600 13px/1 var(--f-latin); letter-spacing: .14em; color: var(--ink); text-align: right; opacity: .75; text-transform: uppercase; }
-.wx .hint span, .wx .ctl span { font: 400 14px/1.2 var(--f-serif); color: var(--ink); letter-spacing: .12em; }
-.wx .hint span i, .wx .ctl span i { font: italic 500 14px/1 var(--f-latin); color: var(--ink-dim); letter-spacing: .1em; margin-left: .5em; }
+.wx kbd { font: 600 14px/1 var(--f-latin); letter-spacing: .14em; color: var(--ink); text-align: right; opacity: .75; text-transform: uppercase; }
+.wx .hint span, .wx .ctl span { font: 600 15px/1.2 var(--f-latin); color: var(--ink); letter-spacing: .06em; }
 
 /* ---------- full-screen screens (title, pause, endings) ---------- */
 .wx .scr { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity 1.4s var(--ease-ink), visibility 0s linear 1.4s; }
@@ -208,21 +208,18 @@ export const HUD_CSS = /* css */`
   -webkit-mask-image: linear-gradient(180deg, #000 42%, transparent 58%); mask-image: linear-gradient(180deg, #000 42%, transparent 58%);
   -webkit-mask-size: 100% 260%; mask-size: 100% 260%; -webkit-mask-position: 0 100%; mask-position: 0 100%; }
 .wx .title.on .tt { animation: wx-wipev 2.4s var(--ease-brush) .4s forwards; }
-.wx .title .tg { writing-mode: vertical-rl; margin-top: clamp(26px, 5vh, 70px); font: 400 clamp(15px, 1.9vh, 22px)/1.9 var(--f-serif); letter-spacing: .55em; color: var(--ink); opacity: 0; }
-.wx .title.on .tg { animation: wx-rise 1.6s var(--ease-ink) 1.8s forwards; }
 .wx .title .seal { width: clamp(30px, 3.6vh, 46px); margin-top: clamp(150px, 26vh, 320px); opacity: 0; transform: scale(1.6) rotate(-8deg); }
 .wx .title.on .seal { animation: wx-stamp .5s cubic-bezier(.5,0,.7,1.4) 2.6s forwards; }
-.wx .title .en { position: absolute; right: 16%; bottom: calc(50% - clamp(170px, 26vh, 330px)); transform: translateX(8%); text-align: right; opacity: 0; }
+.wx .title .en { position: absolute; right: 16%; bottom: calc(50% - clamp(190px, 29vh, 360px)); transform: translateX(8%); text-align: right; opacity: 0; }
 .wx .title.on .en { animation: wx-rise 1.6s var(--ease-ink) 2.2s forwards; }
-.wx .title .en b { display: block; font: 600 clamp(15px, 1.3vw, 22px)/1 var(--f-latin); letter-spacing: .62em; color: var(--ink); }
+.wx .title .en b { display: block; font: 600 clamp(15px, 1.3vw, 22px)/1.25 var(--f-latin); letter-spacing: .5em; color: var(--ink); }
 .wx .title .en i { display: block; margin-top: 10px; font: italic 400 clamp(12px, 1vw, 16px)/1 var(--f-latin); letter-spacing: .24em; color: var(--ink-dim); }
 .wx .title .go { position: absolute; left: 50%; bottom: 9vh; transform: translateX(-50%); display: flex; align-items: center; gap: 18px; opacity: 0; white-space: nowrap; }
 .wx .title.on .go { animation: wx-rise 1.4s var(--ease-ink) 3.1s forwards; }
 .wx .title .go .ln { width: clamp(50px, 7vw, 120px); height: 10px; background: var(--ink); opacity: .6; -webkit-mask-image: var(--t-thin); mask-image: var(--t-thin); }
 .wx .title .go .ln.r { transform: scaleX(-1); }
 .wx .title .go div.t { text-align: center; animation: wx-breathe 3.6s ease-in-out infinite; }
-.wx .title .go div.t b { display: block; font: 400 clamp(15px, 1.3vw, 20px)/1 var(--f-serif); letter-spacing: .7em; padding-left: .7em; color: var(--ink); }
-.wx .title .go div.t i { display: block; margin-top: 8px; font: italic 400 13px/1 var(--f-latin); letter-spacing: .38em; padding-left: .38em; color: var(--ink-dim); }
+.wx .title .go div.t b { display: block; font: 600 clamp(14px, 1.2vw, 18px)/1 var(--f-latin); letter-spacing: .5em; padding-left: .5em; text-transform: uppercase; color: var(--ink); }
 
 /* pause */
 .wx .pause { pointer-events: none; transition-duration: .5s; }
@@ -230,27 +227,23 @@ export const HUD_CSS = /* css */`
 .wx .pause .shade { background: linear-gradient(90deg, rgba(8,7,5,.86), rgba(8,7,5,.6) 38%, rgba(8,7,5,.28) 70%, rgba(8,7,5,.2));
   -webkit-backdrop-filter: blur(3px) saturate(.75); backdrop-filter: blur(3px) saturate(.75); }
 .wx .pause .pn { position: absolute; left: clamp(28px, 11vw, 220px); top: 50%; transform: translateY(-50%); display: flex; gap: clamp(26px, 4vw, 70px); align-items: flex-start; }
-.wx .pause .hd { writing-mode: vertical-rl; font: clamp(80px, 13vh, 150px)/1 var(--f-brush); color: var(--ink-hi); filter: url(#wx-ink); opacity: .95; }
-.wx .pause .hd small { display: block; font: italic 500 13px/1 var(--f-latin); letter-spacing: .5em; color: var(--ink-dim); margin-right: 14px; }
+.wx .pause .hd { writing-mode: vertical-rl; font: 600 clamp(44px, 8vh, 88px)/1 var(--f-latin); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-hi); filter: url(#wx-ink); opacity: .95; }
 .wx .pause .mn { display: flex; flex-direction: column; gap: clamp(8px, 1.6vh, 16px); padding-top: 8px; }
 .wx .pause button { all: unset; position: relative; cursor: pointer; display: flex; align-items: baseline; gap: 16px; padding: 6px 2px 10px; color: var(--ink); }
-.wx .pause button b { font: 400 clamp(26px, 3.6vh, 38px)/1 var(--f-brush); letter-spacing: .2em; }
-.wx .pause button i { font: italic 500 clamp(13px, 1.6vh, 16px)/1 var(--f-latin); letter-spacing: .3em; color: var(--ink-dim); text-transform: uppercase; }
+.wx .pause button b { font: 600 clamp(22px, 3.2vh, 34px)/1 var(--f-latin); letter-spacing: .14em; text-transform: uppercase; }
 .wx .pause button::after { content: ''; position: absolute; left: -6px; right: -20px; bottom: -2px; height: 12px; background: var(--verm-hi);
   -webkit-mask-image: var(--t-thin), linear-gradient(90deg, #000 42%, transparent 58%); mask-image: var(--t-thin), linear-gradient(90deg, #000 42%, transparent 58%);
   -webkit-mask-size: 100% 100%, 260% 100%; mask-size: 100% 100%, 260% 100%; -webkit-mask-position: 0 0, 100% 0; mask-position: 0 0, 100% 0;
   -webkit-mask-composite: source-in; mask-composite: intersect; transition: -webkit-mask-position .45s var(--ease-brush), mask-position .45s var(--ease-brush); opacity: .9; }
 .wx .pause button:hover::after, .wx .pause button:focus-visible::after, .wx .pause button.sel::after { -webkit-mask-position: 0 0, 0 0; mask-position: 0 0, 0 0; }
 .wx .pause button:hover b, .wx .pause button.sel b { color: var(--ink-hi); text-shadow: 0 0 18px rgba(255,220,170,.25); }
-.wx .pause .qual { display: flex; align-items: center; gap: 14px; margin-top: 2px; padding-left: 2px; pointer-events: auto; }
-.wx .pause .qual b { font: 400 clamp(20px, 2.6vh, 28px)/1 var(--f-brush); letter-spacing: .2em; color: var(--ink); margin-right: 4px; }
-.wx .pause .qual i { font: italic 500 13px/1 var(--f-latin); letter-spacing: .3em; color: var(--ink-dim); text-transform: uppercase; margin-left: 6px; }
-.wx .pause .qual .qo { font: 400 clamp(16px, 2.1vh, 22px)/1 var(--f-brush); color: var(--ink-dim); cursor: pointer; padding: 4px 2px; border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; }
+.wx .pause .qual { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 2px; padding-left: 2px; pointer-events: auto; }
+.wx .pause .qual b { font: 600 clamp(15px, 2vh, 20px)/1 var(--f-latin); letter-spacing: .22em; text-transform: uppercase; color: var(--ink); margin-right: 4px; }
+.wx .pause .qual .qo { font: 600 clamp(15px, 2vh, 19px)/1 var(--f-latin); letter-spacing: .06em; color: var(--ink-dim); cursor: pointer; padding: 4px 2px; border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; }
 .wx .pause .qual .qo:hover { color: var(--ink-hi); }
 .wx .pause .qual .qo.on { color: var(--ink-hi); border-bottom-color: var(--verm); }
 .wx .pause .vol { display: flex; align-items: center; gap: 16px; margin-top: 4px; padding-left: 2px; }
-.wx .pause .vol b { font: 400 clamp(20px, 2.6vh, 28px)/1 var(--f-brush); letter-spacing: .2em; color: var(--ink); }
-.wx .pause .vol i { font: italic 500 13px/1 var(--f-latin); letter-spacing: .3em; color: var(--ink-dim); text-transform: uppercase; }
+.wx .pause .vol b { font: 600 clamp(15px, 2vh, 20px)/1 var(--f-latin); letter-spacing: .22em; text-transform: uppercase; color: var(--ink); }
 .wx .pause .sl { position: relative; width: clamp(160px, 16vw, 260px); height: 26px; cursor: pointer; --v: .8; touch-action: none; }
 .wx .pause .sl > * { position: absolute; inset: 0; }
 .wx .pause .sl .tr { background: var(--ink); opacity: .16; -webkit-mask-image: var(--t-stroke2); mask-image: var(--t-stroke2); }
@@ -282,11 +275,10 @@ export const HUD_CSS = /* css */`
 .wx .end.on .st { animation: wx-rise 1.4s var(--ease-ink) 5s forwards; }
 .wx .end .st div { text-align: center; }
 .wx .end .st b { display: block; font: 400 clamp(22px, 2vw, 30px)/1 var(--f-brush); color: var(--ink-hi); }
-.wx .end .st i { display: block; margin-top: 6px; font: 400 12px/1 var(--f-serif); letter-spacing: .4em; padding-left: .4em; color: var(--ink-dim); font-style: normal; }
+.wx .end .st i { display: block; margin-top: 6px; font: 600 12px/1 var(--f-latin); letter-spacing: .26em; padding-left: .26em; text-transform: uppercase; color: var(--ink-dim); }
 .wx .end .go { position: absolute; left: 50%; bottom: 7vh; transform: translateX(-50%); text-align: center; opacity: 0; pointer-events: none; }
 .wx .end.on .go { animation: wx-rise 1.4s var(--ease-ink) 5.6s forwards; }
-.wx .end .go b { display: block; font: 400 clamp(18px, 1.6vw, 24px)/1 var(--f-brush); letter-spacing: .6em; padding-left: .6em; color: var(--ink); animation: wx-breathe 3.6s ease-in-out infinite; }
-.wx .end .go i { display: block; margin-top: 8px; font: italic 400 13px/1 var(--f-latin); letter-spacing: .38em; padding-left: .38em; color: var(--ink-dim); }
+.wx .end .go b { display: block; font: 600 clamp(15px, 1.3vw, 20px)/1 var(--f-latin); letter-spacing: .5em; padding-left: .5em; text-transform: uppercase; color: var(--ink); animation: wx-breathe 3.6s ease-in-out infinite; }
 
 /* ---------- keyframes ---------- */
 @keyframes wx-breathe { 0%, 100% { opacity: .62; } 50% { opacity: 1; } }
@@ -316,13 +308,13 @@ export const HUD_CSS = /* css */`
   100% { color: var(--ink-hi); text-shadow: 0 1px 3px rgba(0,0,0,.35), 0 2px 18px rgba(0,0,0,.4); transform: none; } }
 @keyframes wx-break { 0% { transform: scaleX(1); filter: brightness(2.2); } 100% { transform: scaleX(1.2); opacity: 0; } }
 .wx .title .en { transition: none; }
-/* combo counter: a brush numeral and 连斩, stamped in on every hit, warming to vermilion as the chain grows */
+/* combo counter: a brush numeral and 'Chain', stamped in on every hit, warming to vermilion as the chain grows */
 .wx .combo { position: absolute; right: 5.5%; top: 34%; display: flex; align-items: baseline; gap: .18em; opacity: 0; pointer-events: none;
   transition: opacity .5s; transform-origin: 100% 60%; }
 .wx .combo.on { opacity: 1; transition: opacity .08s; }
 .wx .combo .n { font: calc(64px + var(--c, 0) * 1.6px)/1 var(--f-brush); color: var(--ink-hi);
   text-shadow: 0 1px 3px rgba(0,0,0,.5), 0 0 18px rgba(0,0,0,.35); filter: url(#wx-ink); }
-.wx .combo .l { font: 22px/1 var(--f-brush); letter-spacing: .2em; color: var(--ink); text-shadow: 0 1px 3px rgba(0,0,0,.55); }
+.wx .combo .l { font: italic 600 18px/1 var(--f-latin); letter-spacing: .18em; text-transform: uppercase; color: var(--ink); text-shadow: 0 1px 3px rgba(0,0,0,.55); }
 .wx .combo.hot .n { color: var(--verm-hi); text-shadow: 0 0 14px rgba(217,73,60,.55), 0 1px 3px rgba(0,0,0,.6); }
 .wx .combo.pop { animation: wx-combo .22s cubic-bezier(.2,1.6,.4,1); }
 @keyframes wx-combo { 0% { transform: scale(1.45) rotate(-4deg); filter: brightness(1.8); } 100% { transform: none; filter: none; } }

@@ -27,10 +27,9 @@
 import * as THREE from 'three';
 import { bus } from '../core/bus.js';
 import { HUD_CSS } from './style.js';
-import { HUD_HTML, WAVES, BOSS_WAVE, WAVE_EN, BOSS_NAMES, VICTORY, DEFEAT, fillEnding, numeral, esc } from './screens.js';
+import { HUD_HTML, WAVES, BOSS_WAVE, BOSS_NAMES, VICTORY, DEFEAT, fillEnding, numeral, esc } from './screens.js';
 import { buildTextures } from './textures.js';
 
-const CJK = /[㐀-鿿]/;
 const MARK_RANGE = 42;          // m: marks beyond this fade out
 const MARK_LINGER = 5.5;        // s: marks stay after the last change
 const FX_POOL = 14;
@@ -120,7 +119,7 @@ export function createHUD(app, opts = {}) {
     if (e) return e;
     const m = document.createElement('div');
     m.className = 'mk';
-    m.innerHTML = '<div class="tr m"></div><div class="fl m"></div><div class="po m"></div><div class="x m"></div><div class="gl"></div><div class="wr">危</div><div class="bk">破</div>';
+    m.innerHTML = '<div class="tr m"></div><div class="fl m"></div><div class="po m"></div><div class="x m"></div><div class="gl"></div><div class="wr">!</div><div class="bk">Break</div>';
     el.marks.appendChild(m);
     e = {
       id, get: null, height: 1.8, anchor: 'feet', stats: null, actor: null, boss: false, name: '', sub: '', kind: '',
@@ -272,9 +271,7 @@ export function createHUD(app, opts = {}) {
   // ---------------------------------------------------------------- banners
   let bannerTimer = 0;
   function banner(title, o = {}) {
-    let no = o.no ?? '', tt = String(title ?? ''), en = o.en ?? '';
-    if (tt.includes('·')) { const [a, b] = tt.split('·').map((s) => s.trim()); if (CJK.test(b)) { no = no || a; tt = b; } }
-    if (!en) en = WAVE_EN[tt] || '';
+    const no = o.no ?? '', tt = String(title ?? ''), en = o.en ?? '';
     const b = el.banner;
     b.classList.remove('on', 'off', 'small', 'boss');
     if (o.boss) b.classList.add('boss');
@@ -289,14 +286,13 @@ export function createHUD(app, opts = {}) {
     bus.emit('ui:sfx', { kind: 'brush' });
   }
   function waveBanner(p = {}) {
-    // director indices are 1-based (wave 1 = 第一回); anything else falls back to counting banners
+    // director indices are 1-based (wave 1 = Wave I); anything else falls back to counting banners
     const n = Number.isFinite(p.index) && p.index >= 1 ? p.index : ++S.waveCount;
     S.waveCount = n;
-    let title = typeof p.title === 'string' ? p.title.trim() : '';
-    let no = `第${numeral(Math.max(1, n))}回`, tt, en = typeof p.sub === 'string' ? p.sub : '';
-    if (title.includes('·')) { const [a, b] = title.split('·').map((x) => x.trim()); if (CJK.test(a)) no = a; title = b; }
-    if (title && CJK.test(title)) { tt = title; en = en || WAVE_EN[tt] || ''; }
-    else { const d = p.boss ? BOSS_WAVE : WAVES[(Math.max(1, n) - 1) % WAVES.length]; tt = d.tt; en = en || title || d.en; }
+    const title = typeof p.title === 'string' ? p.title.trim() : '';
+    const d = p.boss ? BOSS_WAVE : WAVES[(Math.max(1, n) - 1) % WAVES.length];
+    const no = p.total && n >= p.total ? 'Final Wave' : `Wave ${numeral(Math.max(1, n))}`;
+    const tt = title || d.tt, en = typeof p.sub === 'string' ? p.sub : '';
     banner(tt, { no, en, boss: !!p.boss });
   }
 
@@ -324,7 +320,7 @@ export function createHUD(app, opts = {}) {
   function fillStats() {
     const t = Math.round(S.playTime), mm = Math.floor(t / 60), ss = String(t % 60).padStart(2, '0');
     el.victory.querySelector('.st').innerHTML =
-      `<div><b>${mm}:${ss}</b><i>用时</i></div><div><b>${S.kills}</b><i>斩敌</i></div><div><b>${S.perfect}</b><i>识破</i></div>`;
+      `<div><b>${mm}:${ss}</b><i>Time</i></div><div><b>${S.kills}</b><i>Foes felled</i></div><div><b>${S.perfect}</b><i>Parries read</i></div>`;
   }
   function showHint(sec = 14) { el.hint.classList.add('on'); S.hintT = sec; }
   /** Back to a blank slate (arena reset / harness): forget enemies, clear banners and screens, full health. */
@@ -388,7 +384,7 @@ export function createHUD(app, opts = {}) {
   el.slider.addEventListener('pointerup', () => { drag = false; });
   el.slider.style.setProperty('--v', (S.volume * 0.94 + 0.03).toFixed(3));
 
-  // graphics quality (流畅 / 均衡 / 极致): the scene applies it (core/quality.js) and answers with 'quality'
+  // graphics quality (Smooth / Balanced / Ultra): the scene applies it (core/quality.js) and answers with 'quality'
   const qualEl = root.querySelector('.pause .qual');
   const markQ = (name) => qualEl?.querySelectorAll('.qo').forEach((o) => o.classList.toggle('on', o.dataset.q === name));
   qualEl?.addEventListener('click', (e) => {
@@ -417,7 +413,7 @@ export function createHUD(app, opts = {}) {
   const autoplay = () => { if (S.state === 'boot') setState('playing'); };
   on('game:state', (p) => setState(p.state));
   on('wave:start', (p) => { autoplay(); waveBanner(p); });
-  on('wave:clear', (p) => { if (!p?.final) banner('风定', { no: '', en: 'The field falls still', seal: false, hold: 2.6 }); });
+  on('wave:clear', (p) => { if (!p?.final) banner('The Field Falls Still', { seal: false, hold: 2.6 }); });
   on('player:hp', (p) => { autoplay(); setPlayer({ hp: p.hp, max: p.max }); });
   on('player:focus', (p) => { autoplay(); setPlayer({ focus: p.value, focusMax: p.max }); });
   on('player:hurt', (p) => flourish('hurt', p.pos, p.dir));
@@ -486,7 +482,7 @@ export function createHUD(app, opts = {}) {
   // combo counter (gameplay emits player:combo {n}; 0 = chain broken)
   const combo = document.createElement('div');
   combo.className = 'combo';
-  combo.innerHTML = '<span class="n"></span><span class="l">连斩</span>';
+  combo.innerHTML = '<span class="n"></span><span class="l">Chain</span>';
   root.appendChild(combo);
   let comboFade = 0;
   on('player:combo', (p) => {
