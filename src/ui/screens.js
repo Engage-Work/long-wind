@@ -94,7 +94,7 @@ ${FILTERS}
 <div class="scr title">
   <div class="shade"></div>
   <div class="col"><div class="tt">长风</div><img class="seal" alt=""></div>
-  <div class="en"><b>LONG WIND</b><i>the wind arrives before the blade</i></div>
+  <div class="en"><b>LONG WIND</b><i>the wind arrives before the blade</i><u class="ed">Engage Edition</u></div>
   <div class="go"><div class="ln m"></div><div class="t"><b>Click to begin</b></div><div class="ln r m"></div></div>
 </div>
 

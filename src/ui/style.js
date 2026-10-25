@@ -214,6 +214,10 @@ export const HUD_CSS = /* css */`
 .wx .title.on .en { animation: wx-rise 1.6s var(--ease-ink) 2.2s forwards; }
 .wx .title .en b { display: block; font: 600 clamp(15px, 1.3vw, 22px)/1.25 var(--f-latin); letter-spacing: .5em; color: var(--ink); }
 .wx .title .en i { display: block; margin-top: 10px; font: italic 400 clamp(12px, 1vw, 16px)/1 var(--f-latin); letter-spacing: .24em; color: var(--ink-dim); }
+/* the edition mark: a hairline and a whisper under the title lockup */
+.wx .title .en .ed { display: block; margin-top: 12px; font: 500 clamp(9px, .72vw, 11px)/1 var(--f-latin); letter-spacing: .6em; text-transform: uppercase; text-decoration: none; color: var(--ink); opacity: .4; }
+.wx .title .en .ed::before { content: ''; display: block; width: 28px; height: 1px; margin: 0 0 12px auto; background: currentColor; opacity: .6; }
+@media (max-height: 520px) { .wx .title .en .ed { margin-top: 8px; } .wx .title .en .ed::before { display: none; } }
 .wx .title .go { position: absolute; left: 50%; bottom: 9vh; transform: translateX(-50%); display: flex; align-items: center; gap: 18px; opacity: 0; white-space: nowrap; }
 .wx .title.on .go { animation: wx-rise 1.4s var(--ease-ink) 3.1s forwards; }
 .wx .title .go .ln { width: clamp(50px, 7vw, 120px); height: 10px; background: var(--ink); opacity: .6; -webkit-mask-image: var(--t-thin); mask-image: var(--t-thin); }
