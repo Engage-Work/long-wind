@@ -43,7 +43,7 @@ export const KINDS = {
     attacks: [['enemyAttack1', 'enemyAttack2'], ['bossFlurry'], ['dartThrow'], ['enemyThrust', 'enemyAttack1'], ['bossDash'], ['assassinBlink']],
     attacks2: [['assassinBlink'], ['bossFlurry', 'enemyThrust'], ['dartThrow'], ['assassinBlink'], ['bossDash', 'bossFlurry'], ['enemyAttack2', 'enemyAttack1', 'enemyThrust']],
     blockChance: 0.2, parryChance: 0.22, poise: 0.35, dmgMul: 1.15, circle: [4.0, 6.0], cooldown: [0.6, 1.5], reachMul: 1.05,
-    boss: true, name: '夜枭', sub: 'The Night Owl',
+    boss: true, name: 'The Night Owl', sub: 'Assassin of the Rain',
   },
   swordmaster: {
     hp: 650, posture: 220, radius: 0.42, walk: 1.7, run: 5.0, strafe: 1.7, turn: 9, animSpeed: 1.1,
@@ -53,7 +53,7 @@ export const KINDS = {
     attacks2: [['bossFlurry', 'bossDash'], ['bossLeap'], ['bossQi'], ['enemyAttack1', 'bossFlurry'], ['bossDash', 'enemyHeavy'], ['bossQi', 'bossLeap']],
     leap: { min: 5.5, max: 9, chance: 0.35 },
     blockChance: 0.34, parryChance: 0.3, poise: 0.5, dmgMul: 1.3, circle: [3.4, 5.0], cooldown: [0.7, 1.8], reachMul: 1.05,
-    boss: true, name: '断刀客', sub: 'The Broken-Blade Master',
+    boss: true, name: 'The Broken Blade', sub: 'Swordmaster',
   },
 };
 

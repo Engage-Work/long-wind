@@ -14,8 +14,8 @@
 //   stage {x, z, yaw}             opera stage facing the plaza
 //   paifang [{x, z, yaw}]         memorial archways at the plaza's street mouths
 export default {
-  id: 'town', no: '第三章', title: '长街灯火', en: 'Lanterns on the Long Street',
-  tagline: '灯市 · 人声', enTagline: 'the whole town is watching',
+  id: 'town', no: 'Chapter III', title: 'Lanterns on the Long Street', short: 'Lantern Street', zh: '长街灯火',
+  tagline: 'the whole town is watching',
   env: { mood: 'ember', u: 0.772, drift: false, storm: 0, rain: 0, wet: 0.3, wind: 0.7, exposure: 1.25, victoryMood: null },
   layout: {
     arenaRadius: 46, playableRadius: 46,
@@ -55,11 +55,11 @@ export default {
   // they come out of the alleys and drop from the eaves (spawn.eaves: some of each wave leap down from the roofs)
   spawn: { ring: true, r: 17, eaves: 0.4 },
   waves: [
-    { title: '灯市', sub: 'The Lantern Market', enemies: ['bandit', 'bandit', 'bandit', 'bandit'], wind: 0.7, maxAttackers: 2 },
-    { title: '惊鸿', sub: 'A Startled Crowd', enemies: ['spearman', 'bandit', 'archer', 'bandit', 'shieldman'], wind: 0.8, maxAttackers: 2 },
-    { title: '檐上', sub: 'From the Eaves', enemies: ['archer', 'archer', 'spearman', 'bandit_heavy', 'bandit', 'shieldman'], wind: 0.9, maxAttackers: 2 },
-    { title: '戏台', sub: 'Before the Opera Stage', enemies: ['swordmaster'], wind: 1.1, windPhase2: 1.6, boss: true, maxAttackers: 1,
-      name: '寒山客', bossSub: 'Master of Cold Mountain' },
+    { title: 'The Lantern Market', enemies: ['bandit', 'bandit', 'bandit', 'bandit'], wind: 0.7, maxAttackers: 2 },
+    { title: 'A Startled Crowd', enemies: ['spearman', 'bandit', 'archer', 'bandit', 'shieldman'], wind: 0.8, maxAttackers: 2 },
+    { title: 'From the Eaves', enemies: ['archer', 'archer', 'spearman', 'bandit_heavy', 'bandit', 'shieldman'], wind: 0.9, maxAttackers: 2 },
+    { title: 'Before the Opera Stage', enemies: ['swordmaster'], wind: 1.1, windPhase2: 1.6, boss: true, maxAttackers: 1,
+      name: 'The Cold Mountain Guest', bossSub: 'Swordmaster' },
   ],
   next: null,
 };

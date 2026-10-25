@@ -2,7 +2,7 @@
 // how), environment (mood, storm, rain, lightning), the wave list and the next level. Owner: integrator.
 // PURE data module (no three.js): the terrain workers import it through world/layout.js.
 //
-//   LEVELS[id] = { id, no, title, en, layout?, terrain?, biome?, env, waves, spawn?, next? }
+//   LEVELS[id] = { id, no, title, short, zh?, tagline?, layout?, terrain?, biome?, env, waves, spawn?, next? }
 //   LEVEL_ORDER               the journey, in order
 //   levelIdFromEnv()          ?level= on the page (default: the first level); workers get theirs in each job
 //   getLevel(id) / LEVEL (the page's level, main thread)

@@ -1,4 +1,4 @@
-// Graphics quality presets (流畅 / 均衡 / 极致). Owner: core.
+// Graphics quality presets (Smooth / Balanced / Ultra). Owner: core.
 //   QUALITY[name] = { label, scale, minScale, grass: [L0, L1, L2], volSteps, aoSamples, bloomLevels }
 //   getQuality() → 'low' | 'med' | 'high'   (URL ?q= wins, then localStorage 'wx.quality', default 'med')
 //   applyQuality(app, name, { grass })       — render scale (temporal upsampling), post sample counts, grass density;
@@ -8,9 +8,9 @@
 import { bus } from './bus.js';
 
 export const QUALITY = {
-  low: { label: '流畅', scale: 0.62, minScale: 0.5, grass: [0.8, 0.6, 0.45], volSteps: 8, aoSamples: 4, bloomLevels: 5 },
-  med: { label: '均衡', scale: 0.8, minScale: 0.6, grass: [1.15, 0.85, 0.65], volSteps: 12, aoSamples: 6, bloomLevels: 6 },
-  high: { label: '极致', scale: 1.0, minScale: 0.72, grass: [1.3, 1.05, 0.85], volSteps: 14, aoSamples: 8, bloomLevels: 6 },
+  low: { label: 'Smooth', scale: 0.62, minScale: 0.5, grass: [0.8, 0.6, 0.45], volSteps: 8, aoSamples: 4, bloomLevels: 5 },
+  med: { label: 'Balanced', scale: 0.8, minScale: 0.6, grass: [1.15, 0.85, 0.65], volSteps: 12, aoSamples: 6, bloomLevels: 6 },
+  high: { label: 'Ultra', scale: 1.0, minScale: 0.72, grass: [1.3, 1.05, 0.85], volSteps: 14, aoSamples: 8, bloomLevels: 6 },
 };
 
 export function getQuality() {

@@ -3,7 +3,7 @@
 //   · lightning: fx/storm.js at the level's interval (level.env.lightning = [min, max] s) — flash + bus 'thunder'
 //   · title screen: the chapter's name and tagline instead of the game's (level 2 onward)
 //   · lanterns: stone lanterns (石灯笼) with a flickering warm lamp each (level.lanterns = [{x, z, yaw?}])
-//   · victory: the 'go' seal reads 前行 and bus 'ui:next' loads the next level (a fade, then the page reloads with
+//   · victory: the 'go' seal reads 'Journey on' and bus 'ui:next' loads the next level (a fade, then the page reloads with
 //     ?level=next; the quality/audio params survive)
 import * as THREE from 'three';
 import { bus } from '../core/bus.js';
@@ -50,23 +50,23 @@ export function createLevelRuntime(app, { env = null, level } = {}) {
   const hud = document.querySelector('.wx');
   const title = hud?.querySelector('.scr.title');
   if (title && level.id !== 'steppe') {
-    const tt = title.querySelector('.col .tt'), tg = title.querySelector('.col .tg');
+    // the vertical column is calligraphy (decoration, like the 长风 logo); the English name below is what's read
+    const tt = title.querySelector('.col .tt');
     const en = title.querySelector('.en b'), ei = title.querySelector('.en i');
     if (tt) {
-      tt.textContent = level.title;
+      tt.textContent = level.zh ?? '';
       // two characters fill the column; four need a smaller brush so the English line below stays clear
-      if (level.title.length > 2) tt.style.fontSize = `clamp(64px, ${(17 * 2.1 / level.title.length).toFixed(1)}vh, 140px)`;
+      if (level.zh?.length > 2) tt.style.fontSize = `clamp(64px, ${(17 * 2.1 / level.zh.length).toFixed(1)}vh, 140px)`;
     }
-    if (tg) tg.textContent = level.tagline ?? level.no;
-    if (en) en.textContent = (level.en ?? '').toUpperCase();
-    if (ei) ei.textContent = level.enTagline ?? '';
+    if (en) en.textContent = level.title.toUpperCase();
+    if (ei) ei.textContent = level.tagline ? `${level.no} · ${level.tagline}` : level.no;
   }
-  // pause menu: 章 — every chapter of the journey (the current one marked)
+  // pause menu: every chapter of the journey (the current one marked)
   const qual = hud?.querySelector('.pause .qual');
   if (qual && !hud.querySelector('.pause .chap')) {
     const row = document.createElement('div');
     row.className = 'qual chap';
-    row.innerHTML = '<b>章</b>' + LEVEL_ORDER.map((id) => `<span class="qo${id === level.id ? ' on' : ''}" data-level="${id}">${LEVELS[id].title}</span>`).join('') + '<i>chapter</i>';
+    row.innerHTML = '<b>Chapter</b>' + LEVEL_ORDER.map((id) => `<span class="qo${id === level.id ? ' on' : ''}" data-level="${id}">${LEVELS[id].short}</span>`).join('');
     qual.after(row);
     row.addEventListener('click', (e) => {
       const id = e.target?.closest?.('[data-level]')?.dataset.level;
@@ -79,7 +79,7 @@ export function createLevelRuntime(app, { env = null, level } = {}) {
   }
   const setVictorySeal = () => {
     const go = hud?.querySelector('.scr.victory .go');
-    if (go && level.next) { go.dataset.act = 'next'; go.innerHTML = '<b>前行</b><i>journey on</i>'; }
+    if (go && level.next) { go.dataset.act = 'next'; go.innerHTML = '<b>Journey on</b>'; }
   };
   setVictorySeal();
   bus.on('game:state', (p) => { if (p?.state === 'victory') setTimeout(setVictorySeal, 50); });
@@ -92,7 +92,7 @@ export function createLevelRuntime(app, { env = null, level } = {}) {
     setTimeout(() => { location.href = levelUrl(level.next); }, 1200);
   }
   bus.on('ui:next', next);
-  // the victory seal (HUD 'data-act' buttons): a click on 前行 goes on
+  // the victory seal (HUD 'data-act' buttons): a click on 'Journey on' goes on
   hud?.addEventListener('click', (e) => { if (e.target?.closest?.('[data-act="next"]')) next(); }, true);
 
   return { next };
