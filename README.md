@@ -122,3 +122,5 @@ npm run build    # 静态站点输出到 dist/
 Source code: [MIT](LICENSE). Third-party assets keep their own licenses — the Poly Haven textures/models are CC0; the character models in `public/assets/models/` (generated with Tripo AI) and the motion capture in `public/assets/anims/mixamo.glb` (from Adobe Mixamo) are **not** MIT-licensed. See [CREDITS.md](CREDITS.md).
 
 源代码采用 MIT 协议；角色模型（Tripo AI 生成）和动作捕捉（Adobe Mixamo）不在 MIT 范围内，请勿单独提取或再分发，详见 [CREDITS.md](CREDITS.md)。
+
+This fork is the English Engage Edition, maintained by Engage.
