@@ -55,6 +55,7 @@ export function createLevelRuntime(app, { env = null, level } = {}) {
     const en = title.querySelector('.en b'), ei = title.querySelector('.en i');
     if (tt) {
       tt.textContent = level.zh ?? '';
+      tt.lang = 'zh-CN';
       // two characters fill the column; four need a smaller brush so the English line below stays clear
       if (level.zh?.length > 2) tt.style.fontSize = `clamp(64px, ${(17 * 2.1 / level.zh.length).toFixed(1)}vh, 140px)`;
     }

@@ -117,10 +117,10 @@ export const HUD_CSS = /* css */`
 .wx .mk.dead .x { animation: wx-slash .5s var(--ease-brush) forwards; }
 .wx .mk.dead { transition: opacity .9s ease .5s; }
 .wx .mk .wr { position: absolute; left: 50%; bottom: 20px; width: 44px; height: 44px; margin-left: -22px; display: grid; place-items: center;
-  font: 700 38px/1 var(--f-latin); color: var(--verm-hi); text-shadow: 0 0 10px rgba(255,80,40,.6), 0 1px 2px rgba(0,0,0,.6); opacity: 0; }
+  font: 600 38px/1 var(--f-latin); color: var(--verm-hi); text-shadow: 0 0 10px rgba(255,80,40,.6), 0 1px 2px rgba(0,0,0,.6); opacity: 0; }
 .wx .mk .wr.go { animation: wx-danger .9s var(--ease-ink) forwards; }
 .wx .mk .bk { position: absolute; left: 50%; bottom: 18px; width: 80px; height: 40px; margin-left: -40px; display: grid; place-items: center;
-  font: italic 700 24px/1 var(--f-latin); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; color: var(--ink-hi); text-shadow: 0 0 12px rgba(255,120,60,.85), 0 0 3px rgba(255,200,150,.9), 0 1px 2px rgba(0,0,0,.6); opacity: 0; }
+  font: italic 600 24px/1 var(--f-latin); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; color: var(--ink-hi); text-shadow: 0 0 12px rgba(255,120,60,.85), 0 0 3px rgba(255,200,150,.9), 0 1px 2px rgba(0,0,0,.6); opacity: 0; }
 .wx .mk .bk.go { animation: wx-danger 1.1s var(--ease-ink) forwards; }
 .wx .mk .gl { position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; margin: -15px; opacity: 0;
   background: radial-gradient(circle, rgba(255,236,190,.95), rgba(255,200,120,.35) 30%, transparent 65%); }
@@ -210,14 +210,14 @@ export const HUD_CSS = /* css */`
 .wx .title.on .tt { animation: wx-wipev 2.4s var(--ease-brush) .4s forwards; }
 .wx .title .seal { width: clamp(30px, 3.6vh, 46px); margin-top: clamp(150px, 26vh, 320px); opacity: 0; transform: scale(1.6) rotate(-8deg); }
 .wx .title.on .seal { animation: wx-stamp .5s cubic-bezier(.5,0,.7,1.4) 2.6s forwards; }
-.wx .title .en { position: absolute; right: 16%; bottom: calc(50% - clamp(190px, 29vh, 360px)); transform: translateX(8%); text-align: right; opacity: 0; }
+.wx .title .en { position: absolute; right: 16%; bottom: max(calc(env(safe-area-inset-bottom, 0px) + 8px), calc(50% - clamp(190px, 29vh, 360px))); transform: translateX(8%); text-align: right; opacity: 0; }
 .wx .title.on .en { animation: wx-rise 1.6s var(--ease-ink) 2.2s forwards; }
 .wx .title .en b { display: block; font: 600 clamp(15px, 1.3vw, 22px)/1.25 var(--f-latin); letter-spacing: .5em; color: var(--ink); }
 .wx .title .en i { display: block; margin-top: 10px; font: italic 400 clamp(12px, 1vw, 16px)/1 var(--f-latin); letter-spacing: .24em; color: var(--ink-dim); }
 /* the edition mark: a hairline and a whisper under the title lockup */
 .wx .title .en .ed { display: block; margin-top: 12px; font: 500 clamp(9px, .72vw, 11px)/1 var(--f-latin); letter-spacing: .6em; text-transform: uppercase; text-decoration: none; color: var(--ink); opacity: .4; }
 .wx .title .en .ed::before { content: ''; display: block; width: 28px; height: 1px; margin: 0 0 12px auto; background: currentColor; opacity: .6; }
-@media (max-height: 520px) { .wx .title .en .ed { margin-top: 8px; } .wx .title .en .ed::before { display: none; } }
+@media (max-height: 520px) { .wx .title .en i { margin-top: 6px; } .wx .title .en .ed { margin-top: 6px; } .wx .title .en .ed::before { display: none; } }
 .wx .title .go { position: absolute; left: 50%; bottom: 9vh; transform: translateX(-50%); display: flex; align-items: center; gap: 18px; opacity: 0; white-space: nowrap; }
 .wx .title.on .go { animation: wx-rise 1.4s var(--ease-ink) 3.1s forwards; }
 .wx .title .go .ln { width: clamp(50px, 7vw, 120px); height: 10px; background: var(--ink); opacity: .6; -webkit-mask-image: var(--t-thin); mask-image: var(--t-thin); }

@@ -433,7 +433,7 @@ html.wx-touch, html.wx-touch body { -webkit-user-select: none; user-select: none
 @media (max-height: 500px) and (orientation: landscape) {
   /* a short landscape phone: 'Tap to begin' moves under the hero, clear of the LONG WIND lines under the column */
   .wx.touch .title .go { left: calc(env(safe-area-inset-left) + 13%); right: auto; bottom: 7vh; }
-  .wx.touch .end .tr { display: none; }            /* no room under the poem columns: the English makes way */
+  .wx.touch .end .body { display: none; }          /* no room for both: the English translation stays, the brush columns make way */
 }
 /* pause menu: rows as wide as their words (a tapped row keeps its underline: touch has sticky hover); on a phone the
    controls list takes the place of the sound / quality / chapter rows, in two columns */

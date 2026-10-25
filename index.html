@@ -8,7 +8,7 @@
 <meta name="description" content="A lone swordsman on a golden-hour grassland. Real-time three.js.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
 <style>
   :root { --bg: #0c0d0b; --ink: #e8d3ad; --vermilion: #b8322a; color-scheme: dark; }
   html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
@@ -37,7 +37,7 @@
 <canvas id="c" tabindex="0"></canvas>
 <div id="hud"></div>
 <div id="load" aria-hidden="true"><div class="wrap">
-  <div class="title">长风</div>
+  <div class="title" lang="zh-CN">长风</div>
   <div class="sub">Vast the sky · boundless the plain</div>
   <svg viewBox="0 0 360 24">
     <defs><filter id="brush" x="-5%" y="-80%" width="110%" height="260%"><feTurbulence type="fractalNoise" baseFrequency="0.9 0.25" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter></defs>
@@ -45,7 +45,7 @@
     <path id="stroke" class="stroke" pathLength="1" d="M6 12 C 90 9, 250 15, 354 11"/>
   </svg>
   <div class="label" id="loadLabel"></div>
-  <div class="seal">剑</div>
+  <div class="seal" lang="zh-CN">剑</div>
 </div></div>
 <script>
   window.__load = function (p, label) {
